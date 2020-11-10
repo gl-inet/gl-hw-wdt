@@ -9,8 +9,8 @@
 #include <linux/module.h>
 #include <linux/device.h>
 
-#define HW_WDI	1//watchdog gpio WDI
-#define HW_DWI_INT_NS 100000000 //feed dog period,100ms = 100000000ns
+#define HW_WDI	2//watchdog gpio WDI
+#define HW_DWI_INT_NS 1000000000 //  feed dog period,100ms = 100000000ns
 static struct hrtimer hw_wdt_timer;
 static ktime_t hw_wdt_timeout;
 
@@ -65,6 +65,7 @@ static enum hrtimer_restart hw_wdt_timeout_handle(struct hrtimer* timer)
 
 	gpio_status = !gpio_status;
 	gpio_set_value(HW_WDI, gpio_status);
+//	gpiod_set_value(gpio_to_desc(HW_WDI),gpio_status);
 	
 	if(enable) {
 		ret = HRTIMER_RESTART;
@@ -89,7 +90,7 @@ static int __init hw_wdt_drv_init(void)
 	hrtimer_init(&hw_wdt_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
 	hw_wdt_timer.function = &hw_wdt_timeout_handle;
 	
-	if( gpio_request(HW_WDI, "hw_wdi") != 0 ){
+/*	if( gpio_request(HW_WDI, "hw_wdi") != 0 ){
 		printk("gpio_request gpio%d error\n",HW_WDI);
 		return 0;
 	}
@@ -99,7 +100,7 @@ static int __init hw_wdt_drv_init(void)
 		gpio_free(HW_WDI);
 		return 0;
 	}
-
+*/
 	hrtimer_start(&hw_wdt_timer, hw_wdt_timeout, HRTIMER_MODE_REL);
 
 	// devno = MKDEV(major,minor);
@@ -113,7 +114,7 @@ static void __exit hw_wdt_drv_exit(void)
 {
 	printk("enter remove\n");
 	hrtimer_cancel(&hw_wdt_timer);
-	gpio_free(HW_WDI);
+//	gpio_free(HW_WDI);
 	device_destroy(drv_class,MKDEV(major,0));
 	class_destroy(drv_class);
 	unregister_chrdev(major,"hw_wdt");
