@@ -15,3 +15,12 @@
 ```
 
 4. 编译
+
+5. 使用
+
+    选上此包后，喂狗程序会自动启动，可通过rmmod 移除模块来停止喂狗
+
+```
+    开启看门狗: echo 1 >/sys/class/gpio/gpio12/value
+    关闭看门狗: echo 0 >/sys/class/gpio/gpio12/value
+```
