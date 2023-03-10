@@ -1,5 +1,3 @@
-### 硬件看门狗驱动
-
 1. Please clone the this code, and put this package to OpenWrt [SDK](https://github.com/gl-inet/sdk)
 
 2. Choose kmod-gl-hw-wdt package in make menuconfig
