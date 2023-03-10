@@ -22,15 +22,7 @@ static struct hrtimer hw_wdt_timer;
 static ktime_t hw_wdt_timeout;
 
 
-static int enable = 1;//驱动加载时，默认开启喂狗
-// static int wdt_open(struct inode *inode, struct file *file)
-// {
-// 	enable = 0;//关闭定时器喂狗功能
-// 	gpio_direction_output(HW_WDT_CTL,0);
-// 	return 0;
-// }
-
-// static unsigned int wdt_status=0x00;//记录引脚状态，每调用一次write时进行"非"操作一次
+static int enable = 1;//When the package is installed, the watchdog will be opened by default
 
 static ssize_t wdt_write(struct file *file, const char *buf, size_t count, loff_t *ppos)
 {
